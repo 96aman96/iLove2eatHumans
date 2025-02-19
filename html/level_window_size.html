@@ -21,17 +21,23 @@
       #human {
         width: 80px;
         height: 160px;
-        top: 500px;
-        left: 500px;
+        top: 50%;
+        left: 50%;
         transform: translate(-50%, -50%);
       }
-      /* silverware image positioned 500px from the bottom and right */
-      #silverware {
-        width: 240px;
-        height: 240px;
-        top: calc(100% - 500px);
-        left: calc(100% - 500px);
-        transform: translate(-50%, -50%);
+      #fence_l {
+        width: 800px;
+        height: 800px;
+        top: 0%;
+        left: calc(100% - 800px);
+        transform: translate(0%, 0%);
+      }
+      #fence_r {
+        width: 800px;
+        height: 800px;
+        top: calc(100% - 800px);
+        left: 0%;
+        transform: translate(0%, 0%);
       }
       /* Win message styling */
       #message {
@@ -41,14 +47,15 @@
         transform: translate(-50%, -50%);
         font-size: 32px;
         font-weight: bold;
-        color: #333;
+        color: #c258ff;
         display: none;
       }
     </style>
   </head>
   <body>
   <img id="human" class="dot" src="../img/human.png" alt="human Dot">
-  <img id="silverware" class="dot" src="../img/silverware.png" alt="silverware Dot">
+  <img id="fence_l" class="dot" src="../img/Fence_Left.png" alt="Fence Left">
+  <img id="fence_r" class="dot" src="../img/Fence_Right.png" alt="Fence Left">
   <div id="message">You Win</div>
 
   <script>
@@ -56,14 +63,13 @@
     function checkWin() {
       const width = window.innerWidth;
       const height = window.innerHeight;
-      if (width >= 980 && width <= 1020 && height >= 980 && height <= 1020) {
+      if (width <= 780 && height <= 780) {
         document.getElementById('message').style.display = 'block';
       } else {
         document.getElementById('message').style.display = 'none';
       }
     }
 
-    window.addEventListener('load', checkWin);
     window.addEventListener('resize', checkWin);
   </script>
 </body>
