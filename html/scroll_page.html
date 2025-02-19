@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Me</title>
+  <style>
+    body {
+      height: 10000px;
+      /* Make the page longer */
+      background-color: #000000;
+      position: relative;
+      overflow-x: hidden;
+      /* Prevent horizontal scrolling */
+    }
+
+    .eye-image {
+      position: absolute;
+      width: 15px;
+      /* Adjust image size */
+      height: auto;
+    }
+
+    .lamb-image {
+      position: absolute;
+      width: 60px;
+      /* Adjust image size */
+      height: auto;
+    }
+
+    .special-image {
+      position: absolute;
+      width: 60px;
+      height: auto;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    const eyeImg = '../img/eyes.png';
+    const lambImg = '../img/lamb.png';
+    const humanImg = '../img/human.png';
+    const eyeCount = 0;
+    const lambCount = 2000;
+    const screenHeight = 10000;
+    const eyeHeight = 0;
+    const lambHeight = 10000;
+    let images = [];
+
+    function isOverlapping(x, y, existingImages, buffer = 50) {
+      return existingImages.some(img =>
+        Math.abs(img.x - x) < buffer && Math.abs(img.y - y) < buffer
+      );
+    }
+
+    // Add eye image
+    for (let i = 0; i < eyeCount; i++) {
+      let img = document.createElement('img');
+      img.src = eyeImg;
+      img.classList.add('eye-image');
+
+      let randomY;
+      if (Math.random() < 0.7) { // More images appear higher
+        randomY = Math.pow(Math.random(), 2) * eyeHeight;
+      } else {
+        randomY = Math.random() * eyeHeight;
+      }
+
+      let scale = 1 + (randomY / screenHeight) * 1.5; // Increase scale for images closer to the bottom
+      img.style.transform = `scale(${scale})`;
+
+      let randomX;
+      let attempts = 0;
+      do {
+        randomX = Math.random() * (window.innerWidth - 100);
+        attempts++;
+      } while (isOverlapping(randomX, randomY, images) && attempts < 10);
+
+      img.style.left = `${randomX}px`;
+      img.style.top = `${randomY}px`;
+      img.style.zIndex = Math.floor(randomY); // Higher images are rendered on top
+
+      images.push({
+        img,
+        x: randomX,
+        y: randomY
+      });
+    }
+
+    // Add lamb image
+    for (let i = 0; i < lambCount; i++) {
+      let img = document.createElement('img');
+      img.src = lambImg;
+      img.classList.add('lamb-image');
+
+      let randomY;
+      if (Math.random() < 0.7) { // More images appear higher
+        randomY = eyeHeight + Math.pow(Math.random(), 2) * lambHeight;
+      } else {
+        randomY = eyeHeight + Math.random() * lambHeight;
+      }
+
+      let scale = 1 + (randomY / screenHeight) * 1.5; // Increase scale for images closer to the bottom
+      img.style.transform = `scale(${scale})`;
+
+      let randomX;
+      let attempts = 0;
+      do {
+        randomX = Math.random() * (window.innerWidth - 100);
+        attempts++;
+      } while (isOverlapping(randomX, randomY, images) && attempts < 10);
+
+      img.style.left = `${randomX}px`;
+      img.style.top = `${randomY}px`;
+      img.style.zIndex = Math.floor(randomY); // Higher images are rendered on top
+
+      images.push({
+        img,
+        x: randomX,
+        y: randomY
+      });
+    }
+
+    // Add special image
+    let specialImg = document.createElement('img');
+    specialImg.src = humanImg;
+    specialImg.classList.add('special-image');
+    specialImg.onclick = () => window.location.href = 'special-page.html'; // Redirect on click
+
+    let specialX, specialY;
+    let attempts = 0;
+    do {
+      specialX = 50 + Math.random() * (window.innerWidth - 150); // Shrink bounds for X
+      specialY = 50 + Math.random() * (screenHeight - 500); // Shrink bounds for Y
+      attempts++;
+    } while (isOverlapping(specialX, specialY, images) && attempts < 10); // Avoid overlap with sheep images
+
+    let scale = 1 + (specialY / screenHeight) * 1.5; // Increase scale for images closer to the bottom
+    specialImg.style.transform = `scale(${scale})`;
+
+    specialImg.style.left = `${specialX}px`;
+    specialImg.style.top = `${specialY}px`;
+    specialImg.style.zIndex = Math.floor(specialY) + 1; // Ensure it's not covered
+
+    // Add the special image to the images array for sorting
+    images.push({
+      img: specialImg,
+      x: specialX,
+      y: specialY
+    });
+
+    // Sort images (including human) by Y position
+    images.sort((a, b) => a.y - b.y);
+
+    // Append images in sorted order
+    images.forEach(item => document.body.appendChild(item.img));
+  </script>
+</body>
+
+</html>
