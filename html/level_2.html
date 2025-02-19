@@ -43,6 +43,7 @@
     const eyeImg = '../img/eyes.png';
     const lambImg = '../img/lamb.png';
     const humanImg = '../img/human.png';
+    const alternateImg = '../img/alternate.png';
     const eyeCount = 0;
     const lambCount = 2000;
     const screenHeight = 10000;
@@ -126,7 +127,7 @@
 
     // Add special image
     let specialImg = document.createElement('img');
-    specialImg.src = humanImg;
+    specialImg.src = alternateImg;
     specialImg.classList.add('special-image');
     specialImg.onclick = () => window.location.href = 'level_3.html'; // Redirect on click
 
@@ -157,6 +158,22 @@
 
     // Append images in sorted order
     images.forEach(item => document.body.appendChild(item.img));
+
+    // Function to toggle the special image's source between two images
+    let eyeOpenTime = 0;  // Track which image is currently displayed
+
+    function toggleSpecialImage() {
+      eyeOpenTime++;
+      if (eyeOpenTime>6) {
+        specialImg.src = alternateImg;  // Switch to alternate image
+        eyeOpenTime=0;
+      } else {
+        specialImg.src = humanImg;  // Switch back to human image
+      }
+    }
+
+    // Change the special image every 500ms (adjust as needed)
+    setInterval(toggleSpecialImage, 500); // Adjust the interval to control the speed of switching
   </script>
 </body>
 
