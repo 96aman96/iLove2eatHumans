@@ -5,7 +5,7 @@
   <link rel="icon" type="image/x-icon" href="../img/pattern.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WITNESS ME</title>
+  <title>PROCESS ME</title>
   <style>
     body {
       font-family: sans-serif;
@@ -18,6 +18,11 @@
       flex-direction: column;
     }
 
+    .dot {
+      position: absolute;
+      /* Set the desisilverware width/height for your images */
+    }
+
     #container {
       width: 65%;
       text-align: center;
@@ -25,6 +30,47 @@
 
     #timer {
       font-size: 1000%;
+    }
+
+    #description {
+      font-size: 100%;
+      left: 39.5%;
+      top: 24.5%;
+    }
+
+    #human1 {
+      width: 40px;
+      height: 80px;
+      left: 45%;
+      top: 19%;
+    }
+
+    #human2 {
+      width: 40px;
+      height: 80px;
+      left: 47.5%;
+      top: 19%;
+    }
+
+    #human3 {
+      width: 40px;
+      height: 80px;
+      left: 50%;
+      top: 19%;
+    }
+
+    #human4 {
+      width: 40px;
+      height: 80px;
+      left: 52.5%;
+      top: 19%;
+    }
+
+    #human5 {
+      width: 40px;
+      height: 80px;
+      left: 55%;
+      top: 19%;
     }
 
     #progress {
@@ -52,10 +98,13 @@
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       const display = document.getElementById("timer");
+      const descriptionText = document.getElementById("description");
       const progressBar = document.getElementById("progress");
       const nextButton = document.getElementById("nextButton");
       const initialTime = (96 * 60 * 60) + (47 * 60) + 34; // 10 seconds countdown
       let keysPressed = {};
+
+      descriptionText.textContent = "Processing";
 
       function resetCountdown() {
         localStorage.setItem("countdown", initialTime);
@@ -144,6 +193,12 @@
 </head>
 
 <body>
+  <div id="description" class="dot"></div>
+  <img id="human1" class="dot" src="../img/human.png" alt="human Dot">
+  <img id="human2" class="dot" src="../img/human.png" alt="human Dot">
+  <img id="human3" class="dot" src="../img/human.png" alt="human Dot">
+  <img id="human4" class="dot" src="../img/human.png" alt="human Dot">
+  <img id="human5" class="dot" src="../img/human.png" alt="human Dot">
   <div id="container">
     <h2 id="timer"></h2>
     <div id="progress"></div>
