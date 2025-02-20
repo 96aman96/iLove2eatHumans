@@ -1,146 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Level 4</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: black;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WITNESS ME</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: black;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    #container {
+      width: 65%;
+      text-align: center;
+    }
+
+    #timer {
+      font-size: 1000%;
+    }
+
+    #progress {
+      font-family: monospace;
+      font-size: 100%;
+      white-space: pre;
+    }
+
+    #nextButton {
+      display: none;
+      margin-top: 20px;
+      padding: 20px 40px;
+      font-size: 400%;
+      cursor: pointer;
+      text-align: center;
+      background-color: white;
+      color: black;
+      border: none;
+      border-radius: 10px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const display = document.getElementById("timer");
+      const progressBar = document.getElementById("progress");
+      const nextButton = document.getElementById("nextButton");
+      const initialTime = (96 * 60 * 60) + (47 * 60) + 34; // 10 seconds countdown
+      let keysPressed = {};
+
+      function resetCountdown() {
+        localStorage.setItem("countdown", initialTime);
+        localStorage.setItem("timestamp", Date.now());
+        return initialTime;
+      }
+
+      function getRemainingTime() {
+        const savedTime = localStorage.getItem("countdown");
+        const savedTimestamp = localStorage.getItem("timestamp");
+
+        if (!savedTime || !savedTimestamp) {
+          return resetCountdown();
         }
-        #container {
-            width: 65%;
-            text-align: center;
+
+        const savedTimestampValue = parseInt(savedTimestamp);
+        const elapsed = Math.floor((Date.now() - savedTimestampValue) / 1000);
+        let remaining = Math.max(0, parseInt(savedTime) - elapsed);
+
+        if (remaining <= 0) {
+          return 0; // Force timer to zero if expired
         }
-        #timer {
-            font-size: 1000%;
+        return remaining;
+      }
+
+      function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, '0')}m ${secs.toString().padStart(2, '0')}s`;
+      }
+
+      function updateProgressBar(remaining) {
+        const totalBlocks = 30;
+        const filledBlocks = remaining <= 0 ? totalBlocks : Math.round((remaining / initialTime) * totalBlocks);
+        progressBar.textContent = '[' + '='.repeat(filledBlocks) + ' '.repeat(totalBlocks - filledBlocks) + ']';
+
+        if (remaining <= 0) {
+          progressBar.textContent = '[' + '='.repeat(totalBlocks) + ']';
+          nextButton.style.display = "block";
         }
-        #progress {
-            font-family: monospace;
-            font-size: 100%;
-            white-space: pre;
+      }
+
+      function startCountdown() {
+        let remainingTime = getRemainingTime();
+        display.textContent = formatTime(remainingTime);
+        updateProgressBar(remainingTime);
+
+        const timerInterval = setInterval(() => {
+          remainingTime--;
+          if (remainingTime <= 0) {
+            clearInterval(timerInterval);
+            localStorage.removeItem("countdown");
+            localStorage.removeItem("timestamp");
+            display.textContent = "00m 00s";
+            progressBar.textContent = '[' + '='.repeat(30) + ']';
+            nextButton.style.display = "block";
+          } else {
+            display.textContent = formatTime(remainingTime);
+            updateProgressBar(remainingTime);
+            localStorage.setItem("countdown", remainingTime);
+            localStorage.setItem("timestamp", Date.now());
+          }
+        }, 1000);
+      }
+
+      startCountdown();
+
+      nextButton.addEventListener("click", function() {
+        window.location.href = "final.html";
+      });
+
+      document.addEventListener("keydown", function(event) {
+        keysPressed[event.key] = true;
+        if (keysPressed['d'] && keysPressed['s']) {
+          localStorage.removeItem("countdown");
+          localStorage.removeItem("timestamp");
+          location.reload();
         }
-        #nextButton {
-            display: none;
-            margin-top: 20px;
-            padding: 20px 40px;
-            font-size: 400%;
-            cursor: pointer;
-            text-align: center;
-            background-color: white;
-            color: black;
-            border: none;
-            border-radius: 10px;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-    </style>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const display = document.getElementById("timer");
-            const progressBar = document.getElementById("progress");
-            const nextButton = document.getElementById("nextButton");
-            const initialTime = (96 * 60 * 60) + (47 * 60) + 34; // 10 seconds countdown
-            let keysPressed = {};
+      });
 
-            function resetCountdown() {
-                localStorage.setItem("countdown", initialTime);
-                localStorage.setItem("timestamp", Date.now());
-                return initialTime;
-            }
-
-            function getRemainingTime() {
-                const savedTime = localStorage.getItem("countdown");
-                const savedTimestamp = localStorage.getItem("timestamp");
-
-                if (!savedTime || !savedTimestamp) {
-                    return resetCountdown();
-                }
-
-                const savedTimestampValue = parseInt(savedTimestamp);
-                const elapsed = Math.floor((Date.now() - savedTimestampValue) / 1000);
-                let remaining = Math.max(0, parseInt(savedTime) - elapsed);
-
-                if (remaining <= 0) {
-                    return 0; // Force timer to zero if expired
-                }
-                return remaining;
-            }
-
-            function formatTime(seconds) {
-                const mins = Math.floor(seconds / 60);
-                const secs = seconds % 60;
-                return `${mins.toString().padStart(2, '0')}m ${secs.toString().padStart(2, '0')}s`;
-            }
-
-            function updateProgressBar(remaining) {
-                const totalBlocks = 30;
-                const filledBlocks = remaining <= 0 ? totalBlocks : Math.round((remaining / initialTime) * totalBlocks);
-                progressBar.textContent = '[' + '='.repeat(filledBlocks) + ' '.repeat(totalBlocks - filledBlocks) + ']';
-
-                if (remaining <= 0) {
-                    progressBar.textContent = '[' + '='.repeat(totalBlocks) + ']';
-                    nextButton.style.display = "block";
-                }
-            }
-
-            function startCountdown() {
-                let remainingTime = getRemainingTime();
-                display.textContent = formatTime(remainingTime);
-                updateProgressBar(remainingTime);
-
-                const timerInterval = setInterval(() => {
-                    remainingTime--;
-                    if (remainingTime <= 0) {
-                        clearInterval(timerInterval);
-                        localStorage.removeItem("countdown");
-                        localStorage.removeItem("timestamp");
-                        display.textContent = "00m 00s";
-                        progressBar.textContent = '[' + '='.repeat(30) + ']';
-                        nextButton.style.display = "block";
-                    } else {
-                        display.textContent = formatTime(remainingTime);
-                        updateProgressBar(remainingTime);
-                        localStorage.setItem("countdown", remainingTime);
-                        localStorage.setItem("timestamp", Date.now());
-                    }
-                }, 1000);
-            }
-
-            startCountdown();
-
-            nextButton.addEventListener("click", function() {
-                window.location.href = "final.html";
-            });
-
-            document.addEventListener("keydown", function(event) {
-                keysPressed[event.key] = true;
-                if (keysPressed['d'] && keysPressed['s']) {
-                    localStorage.removeItem("countdown");
-                    localStorage.removeItem("timestamp");
-                    location.reload();
-                }
-            });
-
-            document.addEventListener("keyup", function(event) {
-                delete keysPressed[event.key];
-            });
-        });
-    </script>
+      document.addEventListener("keyup", function(event) {
+        delete keysPressed[event.key];
+      });
+    });
+  </script>
 </head>
+
 <body>
-<div id="container">
+  <div id="container">
     <h2 id="timer"></h2>
     <div id="progress"></div>
     <button id="nextButton">Next</button>
-</div>
+  </div>
 </body>
+
 </html>
