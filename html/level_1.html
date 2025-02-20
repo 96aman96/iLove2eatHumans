@@ -37,11 +37,11 @@
     .next-button {
       display: none;
       position: absolute;
-      top: 90%;
-      left: 50%;
+      bottom:40px;
+    right: 300px;
       transform: translate(-50%, -50%);
-      padding: 10px 20px;
-      font-size: 24px;
+      padding: 8px 12px 10px 12px;
+      font-size: 25px;
       background-color: white;
       border: none;
       cursor: pointer;
@@ -51,7 +51,7 @@
 
 <body>
   <div class="grid" id="grid"></div>
-  <button class="next-button" id="nextButton" onclick="window.location.href='level_2.html'">›››</button>
+  <button class="next-button" id="nextButton" onclick="window.location.href='level_2.html'">➜</button>
   <script>
     const requiredPattern = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -120,7 +120,7 @@
       }
     });
   </script>
-  <img src="../img/pattern.png" style="position: absolute; bottom: 50px; right: 50px; width: 64px; height: 64px;">
+  <img src="../img/pattern.png" style="position: absolute; bottom: 60px; right: 60px; width: 64px; height: 64px;">
 </body>
 
 </html>
