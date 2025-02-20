@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Persistent Countdown Timer</title>
+    <title>Level 4</title>
     <style>
         body {
             font-family: sans-serif;
@@ -41,16 +41,6 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            display: none;
-            margin-top: 20px;
-            padding: 20px 40px;
-            font-size: 400%;
-            cursor: pointer;
-            text-align: center;
-            background-color: white;
-            color: black;
-            border: none;
-            border-radius: 10px;
         }
     </style>
     <script>
@@ -58,7 +48,7 @@
             const display = document.getElementById("timer");
             const progressBar = document.getElementById("progress");
             const nextButton = document.getElementById("nextButton");
-            const initialTime = 10; // 99 hours, 46 minutes, 49 seconds
+            const initialTime = (96 * 60 * 60) + (47 * 60) + 34; // 10 seconds countdown
             let keysPressed = {};
 
             function resetCountdown() {
@@ -77,20 +67,18 @@
 
                 const savedTimestampValue = parseInt(savedTimestamp);
                 const elapsed = Math.floor((Date.now() - savedTimestampValue) / 1000);
-                let remaining = parseInt(savedTime) - elapsed;
+                let remaining = Math.max(0, parseInt(savedTime) - elapsed);
 
                 if (remaining <= 0) {
-                    return 0; // Force timer to zero if time manipulation is detected
+                    return 0; // Force timer to zero if expired
                 }
                 return remaining;
             }
 
             function formatTime(seconds) {
-                const hrs = Math.floor(seconds / 3600);
-                seconds %= 3600;
                 const mins = Math.floor(seconds / 60);
                 const secs = seconds % 60;
-                return `${hrs.toString().padStart(2, '0')}h ${mins.toString().padStart(2, '0')}m ${secs.toString().padStart(2, '0')}s`;
+                return `${mins.toString().padStart(2, '0')}m ${secs.toString().padStart(2, '0')}s`;
             }
 
             function updateProgressBar(remaining) {
@@ -104,22 +92,30 @@
                 }
             }
 
-            let remainingTime = getRemainingTime();
-            display.textContent = formatTime(remainingTime);
-            updateProgressBar(remainingTime);
-
-            const timerInterval = setInterval(() => {
-                remainingTime = getRemainingTime();
+            function startCountdown() {
+                let remainingTime = getRemainingTime();
                 display.textContent = formatTime(remainingTime);
                 updateProgressBar(remainingTime);
 
-                if (remainingTime <= 0) {
-                    clearInterval(timerInterval);
-                } else {
-                    localStorage.setItem("countdown", remainingTime);
-                    localStorage.setItem("timestamp", Date.now());
-                }
-            }, 1000);
+                const timerInterval = setInterval(() => {
+                    remainingTime--;
+                    if (remainingTime <= 0) {
+                        clearInterval(timerInterval);
+                        localStorage.removeItem("countdown");
+                        localStorage.removeItem("timestamp");
+                        display.textContent = "00m 00s";
+                        progressBar.textContent = '[' + '='.repeat(30) + ']';
+                        nextButton.style.display = "block";
+                    } else {
+                        display.textContent = formatTime(remainingTime);
+                        updateProgressBar(remainingTime);
+                        localStorage.setItem("countdown", remainingTime);
+                        localStorage.setItem("timestamp", Date.now());
+                    }
+                }, 1000);
+            }
+
+            startCountdown();
 
             nextButton.addEventListener("click", function() {
                 window.location.href = "final.html";
