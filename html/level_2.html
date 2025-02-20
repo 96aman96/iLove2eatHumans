@@ -4,28 +4,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Find Me</title>
+  <title>FIND ME</title>
   <style>
     body {
       height: 10000px;
-      /* Make the page longer */
       background-color: #000000;
       position: relative;
       overflow-x: hidden;
-      /* Prevent horizontal scrolling */
     }
 
     .eye-image {
       position: absolute;
       width: 15px;
-      /* Adjust image size */
       height: auto;
     }
 
     .lamb-image {
       position: absolute;
       width: 60px;
-      /* Adjust image size */
       height: auto;
     }
 
@@ -160,15 +156,15 @@
     images.forEach(item => document.body.appendChild(item.img));
 
     // Function to toggle the special image's source between two images
-    let eyeOpenTime = 0;  // Track which image is currently displayed
+    let eyeOpenTime = 0; // Track which image is currently displayed
 
     function toggleSpecialImage() {
       eyeOpenTime++;
-      if (eyeOpenTime>6) {
-        specialImg.src = alternateImg;  // Switch to alternate image
-        eyeOpenTime=0;
+      if (eyeOpenTime > 6) {
+        specialImg.src = alternateImg; // Switch to alternate image
+        eyeOpenTime = 0;
       } else {
-        specialImg.src = humanImg;  // Switch back to human image
+        specialImg.src = humanImg; // Switch back to human image
       }
     }
 
